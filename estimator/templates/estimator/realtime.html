@@ -1,0 +1,208 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.2"></script>
+
+    <script>
+
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        var socket_name = ws_scheme + '://' + window.location.host + '/ws/realtime/';
+
+        let socket =new WebSocket(socket_name);
+        socket.onopen =function(e){
+            alert('Connection established');
+        };
+
+        socket.onmessage = function(e){
+            console.log(e.data);
+            let date = new Date()
+            var date_string = (date.getMonth()+1) + '/' + date.getDate() +" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()
+            var recData=JSON.parse(e.data);
+            timeNew = TemparetureData['data']['labels']
+            timeNew.shift()
+            timeNew.push(date_string)
+            TemparetureData['data']['labels']=timeNew;
+            tNew=TemparetureData['data']['datasets'][0]['data'];
+            tNew.shift();
+            tNew.push(recData.temperature);
+            TemparetureData['data']['datasets'][0]['data']=tNew;
+            window.tLine.update();
+
+            pNew=PowerData['data']['datasets'][0]['data'];
+            pNew.shift();
+            pNew.push(recData.power);
+            PowerData['data']['labels']=timeNew;
+            PowerData['data']['datasets'][0]['data']=pNew;
+            window.pLine.update();
+
+            cNew=CarbonData['data']['datasets'][0]['data'];
+            cNew.shift();
+            cNew.push(recData.carbon);
+            CarbonData['data']['labels']=timeNew;
+            CarbonData['data']['datasets'][0]['data']=cNew;
+            window.cLine.update();
+
+        };
+
+        socket.onclose = function(e){
+            alert('Connection CLosed');
+        };
+
+    </script>
+
+    <h1>Real-Time Carbon Emission Evaluation Sample of Buildings</h1>
+
+    <h2>Real-Time Data From Building</h2>
+
+    <h3>Temperature</h3>
+    <div>
+        <canvas id="mytemperature" width="800" height="300"></canvas>
+    </div>
+
+    <h3>Power</h3>
+    <div>
+        <canvas id="mypower" width="800" height="300"></canvas>
+    </div>
+
+    <h2>Carbon Emission Estimation</h2>
+    <div>
+        <canvas id="mycarbon" width="800" height="300"></canvas>
+    </div>
+
+    <script>
+
+        Chart.defaults.font.size = 16;
+
+        var TemparetureData={
+            type: 'line',
+            color: 'black',
+            data: {
+                labels: ['---','---','---','---','---','---','---','---'],
+                datasets: [{
+                    label: 'Tempareture (Celsius)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: 'rgba(255, 0, 0, 1)',
+                    borderColor: 'rgba(255, 0, 0, 0.6)',
+                    borderWidth: 5
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        var tctx = document.getElementById('mytemperature').getContext('2d');
+        window.tLine = new Chart(tctx, TemparetureData);
+
+        var PowerData={
+            type: 'line',
+            data: {
+                labels: ['---','---','---','---','---','---','---','---'],
+                datasets: [{
+                    label: 'Power (kWh)',
+                    data: [0, 0, 0, 0, 0, 0,0,0],
+                    backgroundColor: 'rgba(255, 0, 255, 1)',
+                    borderColor: 'rgba(255, 0, 255, 0.6)',
+                    borderWidth: 5
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        var pctx = document.getElementById('mypower').getContext('2d');
+        window.pLine = new Chart(pctx, PowerData);
+
+        var CarbonData={
+            type: 'line',
+            data: {
+                labels: ['---','---','---','---','---','---','---','---'],
+                datasets: [{
+                    label: 'Carbon Emission (kg)',
+                    data: [0, 0, 0, 0, 0, 0,0,0],
+                    backgroundColor: 'rgba(0, 0, 255, 1)',
+                    borderColor: 'rgba(0, 0, 255, 0.6)',
+                    borderWidth: 5
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            borderWidth: 5,
+                            lineWidth: 3,
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        var cctx = document.getElementById('mycarbon').getContext('2d');
+        window.cLine = new Chart(cctx, CarbonData);
+    </script>
+
+  
+{% endblock %}
