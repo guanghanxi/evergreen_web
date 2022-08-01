@@ -54,4 +54,4 @@ def run():
         print(row)
         m, created = Machine.objects.get_or_create(name=row[0], performance = row[1])
         e, created = Energy.objects.get_or_create(name=row[3])
-        mp, created = MachinePerformance.objects.get_or_create(name=row[2], energy = e, energy_volume = float(row[4]))
+        mp, created = MachinePerformance.objects.get_or_create(name=row[2], machine=m,  energy = e, energy_volume = float(row[4]))
