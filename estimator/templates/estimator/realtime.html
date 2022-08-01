@@ -5,10 +5,7 @@
 
     <script>
 
-        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-        var socket_name = ws_scheme + '://' + window.location.host + '/ws/realtime/';
-
-        let socket =new WebSocket(socket_name);
+        let socket =new WebSocket('ws://localhost:8000/ws/realtime/');
         socket.onopen =function(e){
             alert('Connection established');
         };
