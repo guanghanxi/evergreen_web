@@ -23,14 +23,14 @@ class DashConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         datapoint = json.loads(text_data)
-        t = datapoint['temperature']
+        g = datapoint['gas']
         p = datapoint['power']
 
         await self.channel_layer.group_send(
             self.groupname,
             {
                 'type':'deprocessing',
-                'temperature': t,
+                'gas': g,
                 'power': p,
             }
         )
@@ -41,4 +41,4 @@ class DashConsumer(AsyncWebsocketConsumer):
 
     async def deprocessing(self,event): 
         
-        await self.send(text_data=json.dumps({'temperature': event['temperature'], 'power': event['power'], 'carbon': event['power']*1.2} ))
+        await self.send(text_data=json.dumps({'gas': event['gas'], 'power': event['power'], 'carbon': event['power']*698 + event['gas']* 2089} ))

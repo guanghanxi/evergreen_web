@@ -5,8 +5,8 @@
         <div class="head-title">
           <h1>Building Carbon Emission Estimation System</h1>
           <p>Welcome to Building Carbon Emission System, a website developed by <em>Ever Green</em>!</p>
-          <p>In this system, you can check buildings' carbon emission coefficients in the database.</p>
-          <p>In this system, you can estimate carbon emissions of buildings</p>
+          <p>In this system, you can check building carbon emission coefficients in the database.</p>
+          <p>In this system, you can estimate carbon emissions of buildings.</p>
         </div>
         <div class = "logo-div">
           {% load static %}
@@ -18,14 +18,16 @@
   <p>The System supports two types of Carbon Emission Estimation of Buildings.</p>
   <ul>
     <li><strong><a class='intext-link' href="{% url 'estimators' %}">Life-Cycle Carbon Emission</a>:</strong> You can input parameters of a building to estimate its life-cycle carbon emissions.</li>
-    <li><strong><a class='intext-link' href="{% url 'realtime' %}">Real-Time Carbon Emission</a>:</strong> You can check the real-time carbon emissions of a building</li>
+    <li><strong><a class='intext-link' href="{% url 'realtime' %}">Real-Time Carbon Emission</a>:</strong> You can check the real-time carbon emissions of a building.</li>
   </ul>
   <h2>Database</h2>
   <p>In this system, you can check four types of data in the database. The four types and corresponding record counts are:</p>
   <ul>
     <li><strong><a class='intext-link' href="{% url 'materials' %}">Material</a>:</strong> {{ num_materials }}</li>
     <li><strong><a class='intext-link' href="{% url 'transportation' %}">Transportation</a>:</strong> {{ num_trans }}</li>
-    <li><strong><a class='intext-link' href="{% url 'energy' %}">Energy</a>:</strong>{{ num_energy }}</li>
+    <li><strong><a class='intext-link' href="{% url 'energy' %}">Energy</a>:</strong> {{ num_energy }}</li>
     <li><strong><a class='intext-link' href="{% url 'machine' %}">Machine</a>:</strong> {{ num_machine }}</li>
   </ul>
+  <h2>Source</h2>
+  <p>Data and building carbon emission estimation models come from the <em>GB/T 51366-2019, Standard for Building Carbon Emission Calculation</em>. </p>
 {% endblock %}
